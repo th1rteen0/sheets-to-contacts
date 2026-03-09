@@ -28,7 +28,6 @@ from googleapiclient.discovery import build
 SPREADSHEET_ID = "1V3rasAeC7cDzFmxybdLT3rwf6wgNQljfopkT1hGmWcM"
 # Find this in the Google Sheet URL:
 # https://docs.google.com/spreadsheets/d/THIS_PART_HERE/edit
-# example: https://docs.google.com/spreadsheets/d/1V3rasAeC7cDzFmxybdLT3rwf6wgNQljfopkT1hGmWcM/edit?gid=1191427220#gid=1191427220
 
 SHEET_NAME = "Form Responses 1"
 # The tab name at the bottom of the spreadsheet
