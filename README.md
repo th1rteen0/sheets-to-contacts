@@ -40,7 +40,7 @@ source venv/bin/activate
 pip install gspread google-auth google-auth-oauthlib google-api-python-client
 ```
 
-### Step 2 — Create Google Cloud credentials (SKIP THIS PART AS IT IS ALREADY CONFIGURED -- only follow if a new gmail other than techofvgs@gmail.com is used)
+### Step 2 — Create Google Cloud credentials
 
 1. Go to https://console.cloud.google.com/
 2. Click **"Select a project"** → **"New Project"** → name it anything (e.g. `contacts-sync`)
@@ -49,16 +49,16 @@ pip install gspread google-auth google-auth-oauthlib google-api-python-client
    - ✅ People API
 4. Go to **APIs & Services → OAuth consent screen**
    - Choose **External** → click Create
-   - Fill in App name and techofvgs@gmail.com email → click through all steps
+   - Fill in App name and Gmail email → click through all steps
 5. On the OAuth consent screen page, click on **Audience** on the sidebar, scroll to **Test users** → **+ Add Users**
-   - Add techofvgs@gmail.com here (required or login will fail with access_denied)
+   - Add Gmail email here (required or login will fail with access_denied)
 6. Go to **APIs & Services → Credentials**
    - Click **"+ Create Credentials"** → **OAuth client ID**
    - Application type: **Desktop app** → name it anything (e.g. `contacts-sync`) → click Create
 7. Click **Download JSON**, rename it to `credentials.json`
 8. Place `credentials.json` in the same folder as `sheets_to_contacts.py`
 
-### Step 3 — Add the existing contacts file (find this in a previous tech email/linked on the tech doc) and rename Output VCF files
+### Step 3 — Add the existing contacts file and rename Output VCF files
 
 Place the existing VCF file in the same folder and add the file name to EXISTING_VCF_FILE:
 ```
