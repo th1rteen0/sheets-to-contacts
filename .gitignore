@@ -1,0 +1,20 @@
+# Google API credentials — never commit these
+credentials.json
+token.json
+
+# Local sync tracker
+synced_rows.json
+
+# VCF files (input and output)
+*.vcf
+
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
