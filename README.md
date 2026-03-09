@@ -22,8 +22,8 @@ the-folder-name/
 ├── credentials.json              ← downloaded from Google Cloud (keep private)
 ├── token.json                    ← auto-created after first login (keep private)
 ├── synced_rows.json              ← auto-created; tracks synced rows locally
-├── all_contacts.vcf              ← output: existing + new contacts
-└── Schumann Probies.vcf          ← output: new contacts only
+├── all_contacts_SEMESTERYEAR.vcf ← output: existing + new contacts
+└── NEWCLASSNAME_probies.vcf      ← output: new contacts only
 ```
 
 > ⚠️ Never share `credentials.json` or `token.json` — they grant access to the Tech Chair Google account.
@@ -121,8 +121,8 @@ python3 sheets_to_contacts.py
 On the **first run**, a browser window will open for Google login. Sign in with the account that has access to the sheet and contacts. If you see "Google hasn't verified this app", click **Continue**.
 
 After each run you'll find:
-- `all_contacts_spring26.vcf` — the existing contacts + all new ones combined
-- `schumann_probies.vcf` — only the contacts added in this run
+- `all_contacts_SEMESTERYEAR.vcf` — the existing contacts + all new ones combined
+- `NEWCLASSNAME_probies.vcf`      — only the contacts added in this run
 
 ---
 
@@ -134,7 +134,7 @@ source venv/bin/activate
 python3 sheets_to_contacts.py
 ```
 
-Each run refreshes both VCF files. `all_contacts_spring26.vcf` always includes everything; `schumann_probies.vcf` only includes contacts from the most recent run.
+Each run refreshes both VCF files. `all_contacts_SEMESTERYEAR.vcf` always includes everything; `NEWCLASSNAME_probies.vcf` only includes contacts from the most recent run.
 
 ---
 
@@ -157,5 +157,5 @@ This deletes all contacts created in the last sync from Google Contacts and clea
 | `Error 403: access_denied` on login | Add your Gmail under Test Users in the OAuth consent screen |
 | `SpreadsheetNotFound` (404) | Check `SPREADSHEET_ID` is correct and you're signed in with an account that has access |
 | Phone/email missing from contacts | Column header in `COLUMN_MAP` doesn't match your sheet exactly — check spacing and capitalisation |
-| `Schumann Probies.vcf` is empty | No new rows were found — all rows were already in `synced_rows.json` |
+| `NEWCLASSNAME_probies.vcf` is empty | No new rows were found — all rows were already in `synced_rows.json` |
 | Want to re-export all contacts as new | Delete `synced_rows.json` and re-run (will re-create API contacts too) |
