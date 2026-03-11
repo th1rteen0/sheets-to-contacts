@@ -60,17 +60,17 @@ pip install gspread google-auth google-auth-oauthlib google-api-python-client
 
 ### Step 3 — Add the existing contacts file and rename Output VCF files
 
-Place the existing VCF file in the same folder and add the file name to EXISTING_VCF_FILE:
+Place the existing VCF file in the same folder and update EXISTING_VCF_FILE:
 ```
-EXISTING_VCF_FILE = "file_name"
+EXISTING_VCF_FILE = "existing_vcf_file_name"
 ```
 
-Update ALL_CONTACTS_VCF to reflect the current semester:
+Update ALL_CONTACTS_VCF variable to reflect the current semester:
 ```
 EXISTING_VCF_FILE = "all_contacts_SEMESTERYEAR.vcf"
 ```
 
-Update NEW_CONTACTS_VCF to reflect the new probile class name:
+Update NEW_CONTACTS_VCF variable to reflect the new probie class name:
 ```
 EXISTING_VCF_FILE = "NEWCLASSNAME_probies.vcf"
 ```
