@@ -191,13 +191,13 @@ def create_api_contact(people_service, first, last, phone, email=None):
 # ─────────────────────────────────────────────
 
 def main():
-    print("\n🔐 Authenticating with Google...")
+    print("\nAuthenticating with Google...")
     creds = get_credentials()
 
-    print("📋 Reading sheet data...")
+    print("Reading sheet data...")
     rows = get_sheet_data(creds)
 
-    print("📂 Loading existing VCF...")
+    print("Loading existing VCF...")
     existing_vcards = load_existing_vcf()
 
     synced = load_synced_rows()
@@ -205,29 +205,27 @@ def main():
 
     new_vcards = []
     created = 0
-    skipped = 0
+    skipped_synced = 0
+    skipped_empty = 0
 
-    print(f"\n🔍 Found {len(rows)} total rows. Processing unsynced rows...\n")
+    print(f"\nFound {len(rows)} total rows. Processing unsynced rows...\n")
 
     for i, row in enumerate(rows):
         row_index = i + 2
-
         fingerprint = row_fingerprint(row)
 
         if fingerprint in synced:
-            skipped += 1
+            skipped_synced += 1
             continue
 
-        # Parse fields
         name_value = str(row.get(COLUMN_MAP.get("name", ""), "")).strip()
         if not name_value:
-            skipped += 1
+            skipped_empty += 1
             continue
 
         parts = name_value.split(" ", 1)
         first = parts[0]
         last  = parts[1] if len(parts) > 1 else ""
-
         phone = str(row.get(COLUMN_MAP.get("phone", ""), "")).strip()
 
         email = None
@@ -238,41 +236,35 @@ def main():
         display_name = f"{first} {last}".strip()
 
         try:
-            # 1. Create via People API
             resource_name = create_api_contact(people_service, first, last, phone, email)
-
-            # 2. Build vCard for this contact
             vcard = build_vcard(first, last, phone, email)
             new_vcards.append(vcard)
-
-            # 3. Mark as synced
             synced.add(fingerprint)
             save_synced_rows(synced)
-
-            print(f"  ✅ Created contact: {display_name} ({resource_name})")
+            print(f"  Created: {display_name} ({resource_name})")
             created += 1
-
         except Exception as e:
-            print(f"  ❌ Failed for row {row_index} ({display_name}): {e}")
+            print(f"  Failed for row {row_index} ({display_name}): {e}")
 
-    # ── Write VCF files ──────────────────────────────
-    print(f"\n📝 Writing VCF files...")
+    print(f"\nWriting VCF files...")
 
     if new_vcards:
-        # all_contacts.vcf = existing + new
         write_vcf(ALL_CONTACTS_VCF, existing_vcards + new_vcards)
-
-        # Schumann Probies.vcf = new contacts only
         write_vcf(NEW_CONTACTS_VCF, new_vcards)
     else:
-        print("  ℹ️  No new contacts to write — VCF files unchanged.")
+        print("  No new contacts to write -- VCF files unchanged.")
+        if skipped_synced > 0:
+            print(f"\n  {skipped_synced} row(s) skipped -- already in '{SYNCED_LOG_FILE}'.")
+            print(f"  If you need to re-sync from scratch:")
+            print(f"    1. python delete_synced_contacts.py")
+            print(f"    2. python sheets_to_contacts.py")
 
-    print(f"\n{'─'*50}")
-    print(f"✅ Done!  Created: {created}  |  Skipped (already synced): {skipped}")
+    print(f"\n{'--'*25}")
+    print(f"Done!  Created: {created}  |  Already synced: {skipped_synced}  |  Empty: {skipped_empty}")
     if new_vcards:
-        print(f"📁 {ALL_CONTACTS_VCF}  → all contacts ({len(existing_vcards) + len(new_vcards)} total)")
-        print(f"📁 {NEW_CONTACTS_VCF}  → new contacts only ({len(new_vcards)})")
-    print(f"{'─'*50}\n")
+        print(f"{ALL_CONTACTS_VCF}  -> {len(existing_vcards) + len(new_vcards)} total contacts")
+        print(f"{NEW_CONTACTS_VCF}  -> {len(new_vcards)} new contacts")
+    print(f"{'--'*25}\n")
 
 
 if __name__ == "__main__":
